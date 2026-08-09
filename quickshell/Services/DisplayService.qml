@@ -1342,6 +1342,8 @@ Singleton {
         DMSService.sendRequest("brightness.rescan", null, response => {
             if (response.error) {
                 log.error("Failed to rescan brightness devices:", response.error);
+            } else if (response.result) {
+                updateFromBrightnessState(response.result);
             }
         });
     }
@@ -1410,6 +1412,7 @@ Singleton {
         function onConnectionStateChanged() {
             if (DMSService.isConnected) {
                 checkGammaControlAvailability();
+                rescanDevices();
             } else {
                 brightnessAvailable = false;
                 gammaControlAvailable = false;
